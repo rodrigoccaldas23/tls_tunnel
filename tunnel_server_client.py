@@ -438,22 +438,22 @@ class TLSTunnel():
     def get_packet_from_tls(self, conn):
         # get first 3 bytes with '\x00' and 2 byte big endian int
         data = conn.recv(5)
-            if data and len(data) == 5:
-                check = data[0]
-                packet_length = int.from_bytes(data[1:3], "big")
-                packet = conn.recv(packet_length)
-                padding_length = int.from_bytes(data[3:5], "big")
-                padding = conn.recv(padding_length)
-                if check == 1:
-                    if data[2] > 0:
-                        print("--> Fake packet coming from the server:")
-                        print("   Byte 0 data = " + str(data[0]) + "   Byte 1 data = " + str(data[1]) + "   Byte 2 data = " + str(data[2]) + "   Byte 3 data = " + str(data[3]) + "   Byte 4 data = " + str(data[4]) + "  Packet = " + str(packet) + "  Padding = " + str(padding))
-                        return False
-                else:
-                    if data[2] > 0:
-                        print("--> True packet coming from the server:")
-                        print("   Byte 0 data = " + str(data[0]) + "   Byte 1 data = " + str(data[1]) + "   Byte 2 data = " + str(data[2]) + "   Byte 3 data = " + str(data[3]) + "   Byte 4 data = " + str(data[4]) + "  Packet = " + str(packet) + "  Padding = " + str(padding))
-                        return packet
+        if data and len(data) == 5:
+            check = data[0]
+            packet_length = int.from_bytes(data[1:3], "big")
+            packet = conn.recv(packet_length)
+            padding_length = int.from_bytes(data[3:5], "big")
+            padding = conn.recv(padding_length)
+            if check == 1:
+                if data[2] > 0:
+                    print("--> Fake packet coming from the server:")
+                    print("   Byte 0 data = " + str(data[0]) + "   Byte 1 data = " + str(data[1]) + "   Byte 2 data = " + str(data[2]) + "   Byte 3 data = " + str(data[3]) + "   Byte 4 data = " + str(data[4]) + "  Packet = " + str(packet) + "  Padding = " + str(padding))
+                    return False
+            else:
+                if data[2] > 0:
+                    print("--> True packet coming from the server:")
+                    print("   Byte 0 data = " + str(data[0]) + "   Byte 1 data = " + str(data[1]) + "   Byte 2 data = " + str(data[2]) + "   Byte 3 data = " + str(data[3]) + "   Byte 4 data = " + str(data[4]) + "  Packet = " + str(packet) + "  Padding = " + str(padding))
+                    return packet
         return False
 
     def cliTapWriteFunction(self, conn):
