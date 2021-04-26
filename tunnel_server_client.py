@@ -204,81 +204,79 @@ class TLSTunnel():
             try:
 
                 if self.padding == 0:
-
-                    # +20 for ethernet headear
-                    packet = tap.read()
-                    # Insert first 3 bytes with 0 and 2 byte big endian int with actual size.
-                    l = len(packet)
-                    b_packet_length = l.to_bytes(
-                        2, byteorder='big')
-                    bb1 = bytearray(b'\x00')
-                    bb2 = bytearray(b_packet_length)
-                    bb3 = bytearray(packet)
-                    buf = bytes(bb1+bb2+bb3)
+		# +20 for ethernet headear
+			packet = tap.read()
+			# Insert first 3 bytes with 0 and 2 byte big endian int with actual size.
+			l = len(packet)
+			b_packet_length = l.to_bytes(
+			2, byteorder='big')
+			bb1 = bytearray(b'\x00')
+			bb2 = bytearray(b_packet_length)
+			bb3 = bytearray(packet)
+			buf = bytes(bb1+bb2+bb3)
                 else:
-                    # +20 for ethernet headear
-                    packet = tap.read()
-                    # Insert first 3 bytes with 0 and 2 byte big endian int with actual size.
-                    padd = addPadding(packet)
-                    l = len(packet)
-                    l_padd = len(padd)
-                    b_packet_length = l.to_bytes(
-                        2, byteorder='big')
-                    b_padding_length = l_padd.to_bytes(
-                        2, byteorder='big')
-                    bb1 = bytearray(b'\x00')
-                    bb2 = bytearray(b_packet_length)
-                    bb3 = bytearray(b_padding_length)
-                    bb4 = bytearray(packet)
-                    bb5 = bytearray(padd)
-                    buf = bytes(bb1+bb2+bb3+bb4+bb5)
+			# +20 for ethernet headear
+			packet = tap.read()
+			# Insert first 3 bytes with 0 and 2 byte big endian int with actual size.
+			padd = addPadding(packet)
+			l = len(packet)
+			l_padd = len(padd)
+			b_packet_length = l.to_bytes(
+			2, byteorder='big')
+			b_padding_length = l_padd.to_bytes(
+			2, byteorder='big')
+			bb1 = bytearray(b'\x00')
+			bb2 = bytearray(b_packet_length)
+			bb3 = bytearray(b_padding_length)
+			bb4 = bytearray(packet)
+			bb5 = bytearray(padd)
+			buf = bytes(bb1+bb2+bb3+bb4+bb5)
 
             except Exception as e:
-                if e.args[0] == errno.EAGAIN or e.args[0] == errno.EWOULDBLOCK:
+		if e.args[0] == errno.EAGAIN or e.args[0] == errno.EWOULDBLOCK:
                     # If we wish to insert a "fake packet", fill 'buf'
                     # if there is no real packet, do we want a fake packet?
-		    if self.padding == 0:
-		        if shouldSendFakePacket():
-                             # maybe create a function that generates dummy packets - fakePacket()
-                            fake_packet = fakePacket()
-                            # fake_packet = b'\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01'
-                            fake_padd = addPadding(fake_packet)
-                            l_fake = len(fake_packet)
-                            b_fake_length = l_fake.to_bytes(
-                                2, byteorder='big')
-                            bb6 = bytearray(b'\x01')
-                            bb7 = bytearray(b_fake_length)
-                            bb8 = bytearray(fake_packet)
-                            buf = bytes(bb6+bb7+bb8)
-                         else:
-                         # we don't want to send a fake packet, and we don't have real packet
-                         # wait a bit and try to read the tap again:
-                            sleep(0.1)
-                            continue 
-
-		    else:
-                        if shouldSendFakePacket():
-                            # maybe create a function that generates dummy packets - fakePacket()
-                            fake_packet = fakePacket()
-                            # fake_packet = b'\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01'
-                            fake_padd = addPadding(fake_packet)
-                            l_fake = len(fake_packet)
-                            l_fake_padd = len(fake_padd)
-                            b_fake_length = l_fake.to_bytes(
-                                2, byteorder='big')
-                            b_fakepadd_length = l_fake_padd.to_bytes(
-                                2, byteorder='big')
-                            bb6 = bytearray(b'\x01')
-                            bb7 = bytearray(b_fake_length)
-                            bb8 = bytearray(b_fakepadd_length)
-                            bb9 = bytearray(fake_packet)
-                            bb10 = bytearray(fake_padd)
-                            buf = bytes(bb6+bb7+bb8+bb9+bb10)
-                        else:
-                            # we don't want to send a fake packet, and we don't have real packet
-                            # wait a bit and try to read the tap again:
-                            sleep(0.1)
-                            continue
+			if self.padding == 0:
+				if shouldSendFakePacket():
+				     # maybe create a function that generates dummy packets - fakePacket()
+				    fake_packet = fakePacket()
+				    # fake_packet = b'\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01'
+				    fake_padd = addPadding(fake_packet)
+				    l_fake = len(fake_packet)
+				    b_fake_length = l_fake.to_bytes(
+					2, byteorder='big')
+				    bb6 = bytearray(b'\x01')
+				    bb7 = bytearray(b_fake_length)
+				    bb8 = bytearray(fake_packet)
+				    buf = bytes(bb6+bb7+bb8)
+				 else:
+				 # we don't want to send a fake packet, and we don't have real packet
+				 # wait a bit and try to read the tap again:
+				    sleep(0.1)
+				    continue 
+			else:
+				if shouldSendFakePacket():
+					# maybe create a function that generates dummy packets - fakePacket()
+					fake_packet = fakePacket()
+					# fake_packet = b'\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01'
+					fake_padd = addPadding(fake_packet)
+					l_fake = len(fake_packet)
+					l_fake_padd = len(fake_padd)
+					b_fake_length = l_fake.to_bytes(
+					2, byteorder='big')
+					b_fakepadd_length = l_fake_padd.to_bytes(
+					2, byteorder='big')
+					bb6 = bytearray(b'\x01')
+					bb7 = bytearray(b_fake_length)
+					bb8 = bytearray(b_fakepadd_length)
+					bb9 = bytearray(fake_packet)
+					bb10 = bytearray(fake_padd)
+					buf = bytes(bb6+bb7+bb8+bb9+bb10)
+				else:
+					# we don't want to send a fake packet, and we don't have real packet
+					# wait a bit and try to read the tap again:
+					sleep(0.1)
+					continue
                 else:
                     print(e)
                     raise
