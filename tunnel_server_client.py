@@ -444,26 +444,26 @@ class TLSTunnel():
                 padding = conn.recv(padding_length)
 
             if fake:
-                """
+                
                 if padded: 
                     print("--> Fake padded packet:")
                     print("   Byte 0 data = " + str(data[0]) + "   Byte 1 data = " + str(data[1]) + "   Byte 2 data = " + str(data[2]) + "   Byte 3 data = " + str(
                             padding_size[0]) + "   Byte 4 data = " + str(padding_size[1]) + "  Packet = " + str(packet) + "  Padding = " + str(padding))
                 else:
                     print("--> Fake packet:")
-                    print("   Byte 0 data = " + str(data[0]) + "   Byte 1 data = " + str(data[1]) + "   Byte 2 data = " + str(data[2]) + "  Packet = " + str(packet)
-                """
+                    print("   Byte 0 data = " + str(data[0]) + "   Byte 1 data = " + str(data[1]) + "   Byte 2 data = " + str(data[2]) + "  Packet = " + str(packet))
+                
                 return False
             elif packet_length > 0:
-                """
+                
                 if padded: 
                     print("--> True padded packet:")
                     print("   Byte 0 data = " + str(data[0]) + "   Byte 1 data = " + str(data[1]) + "   Byte 2 data = " + str(data[2]) + "   Byte 3 data = " + str(
                             padding_size[0]) + "   Byte 4 data = " + str(padding_size[1]) + "  Packet = " + str(packet) + "  Padding = " + str(padding))
                 else:
                     print("--> True packet:")
-                    print("   Byte 0 data = " + str(data[0]) + "   Byte 1 data = " + str(data[1]) + "   Byte 2 data = " + str(data[2]) + "  Packet = " + str(packet)
-                """
+                    print("   Byte 0 data = " + str(data[0]) + "   Byte 1 data = " + str(data[1]) + "   Byte 2 data = " + str(data[2]) + "  Packet = " + str(packet))
+                
                 return packet
         return False
 
